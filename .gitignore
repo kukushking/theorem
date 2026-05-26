@@ -1,0 +1,18 @@
+# Lean / Lake build artifacts (includes the multi-GB Mathlib cache)
+.lake/
+**/.lake/
+*.olean
+*.ilean
+*.trace
+build/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Editor / OS / local agent settings
+.DS_Store
+.idea/
+.vscode/
+.claude/settings.local.json
