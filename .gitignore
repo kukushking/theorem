@@ -16,3 +16,14 @@ __pycache__/
 .idea/
 .vscode/
 .claude/settings.local.json
+
+# Personal solutions / run logs — prompts (EXERCISES.md, RESULTS.md template)
+# live on main; your filled-in answers stay local.
+01-smt/exercises.py
+**/MY_RESULTS.md
+**/MY_AUDIT.md
+
+# Local R&D directories (private exploration, not part of the public bootcamp)
+**/_erdos/
+**/_audit_snapshots/
+05-pvsnp-audit/

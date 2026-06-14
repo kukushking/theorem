@@ -13,7 +13,7 @@ It's organized as a 4-rung ladder. Do them in order; each is an hour or two.
 | 1 | **SMT solving** — fully-automatic logic + arithmetic engines (the industrial workhorse) | `uv run 01-smt/examples.py` | [`01-smt/`](./01-smt) |
 | 2 | **Lean 4 basics** — interactive proving; the language LLM provers target | `cd 02-lean-basics && lake build` | [`02-lean-basics/`](./02-lean-basics) |
 | 3 | **Lean + Mathlib + a hammer** — proving against the 274K-theorem library, with one-button automation | `cd 03-lean-math && lake env lean LeanMath/Hammer.lean` | [`03-lean-math/`](./03-lean-math) |
-| 4 | **Leverage an LLM** — an agent loop: LLM drafts a proof → Lean verifies → iterate on errors | *(your next project)* | — |
+| 4 | **Leverage an LLM** — an agent loop: LLM drafts a proof → Lean verifies → iterate on errors | `cd 04-llm-agent && uv run python agent.py --all --prover local` | [`04-llm-agent/`](./04-llm-agent) |
 
 📖 **[`GETTING_STARTED.md`](./GETTING_STARTED.md)** — the detailed, do-it-yourself walkthrough.
 🔬 **[`RESEARCH.md`](./RESEARCH.md)** — the field survey: classical ATP, SMT, hammers, the
@@ -54,6 +54,12 @@ cd 03-lean-math
 lake exe cache get          # MUST run from inside 03-lean-math (see gotcha below)
 lake build
 lake env lean LeanMath/Hammer.lean   # no output = all the automation tactics work
+cd ..
+
+# 5. Rung 4 — LLM-driven Lean prover (see 04-llm-agent/README.md for Anthropic / Ollama setup)
+brew install --cask ollama && open -a Ollama
+ollama pull qwen2.5-coder:7b
+cd 04-llm-agent && uv sync && uv run python agent.py --all --prover local
 ```
 
 Install the VS Code **Lean 4** extension to watch proof goals update live as you type.
@@ -73,7 +79,8 @@ is the best first hour.
 ├── RESEARCH.md           # the field: SOTA, frontier systems, benchmarks, sources
 ├── 01-smt/               # Rung 1 — Z3 / SMT examples + exercises
 ├── 02-lean-basics/       # Rung 2 — core-Lean proofs (no Mathlib, instant build)
-└── 03-lean-math/         # Rung 3 — Lean + Mathlib workbench + HAMMER.md (cache not committed)
+├── 03-lean-math/         # Rung 3 — Lean + Mathlib workbench + HAMMER.md (cache not committed)
+└── 04-llm-agent/         # Rung 4 — LLM-driven Lean prover (Anthropic API + Ollama)
 ```
 
 The big build artifacts (`**/.lake/`, the multi-GB Mathlib cache, `.olean` files) are

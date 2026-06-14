@@ -1,0 +1,13 @@
+[project]
+name = "llm-agent"
+version = "0.1.0"
+description = "Rung 4 of the ATP Bootcamp — LLM-driven Lean prover with pluggable provers"
+requires-python = ">=3.11"
+dependencies = [
+    "lean-interact>=0.11",        # Python wrapper over the Lean REPL
+    "anthropic>=0.50",            # Anthropic Console SDK
+    "httpx>=0.27",                # for the Ollama HTTP API
+]
+
+[tool.uv]
+package = false                   # this isn't a library; we just `uv run` scripts here
