@@ -4,6 +4,22 @@
 > iterate on the compiler errors. Empirical, hands-on, and the truest test of where
 > LLM-based theorem proving actually sits today.
 
+## Field result: a merged upstream contribution
+
+This architecture — the same prover/verifier loop in this directory, extended with
+full-file context and an `#print axioms` soundness check — produced a proof of the
+**Lambert series identity** (Erdős Problem 1049's textbook lemma), merged into
+Google DeepMind's [formal-conjectures](https://github.com/google-deepmind/formal-conjectures)
+as [PR #4286](https://github.com/google-deepmind/formal-conjectures/pull/4286)
+(June 2026, +195/-1, kernel-verified: `propext`, `Classical.choice`, `Quot.sound` only).
+
+The working split that got it there: the LLM (Opus 4.8) produced ~95% of the proof
+structure; a human closed the remaining ~5% — surgical fixes like a hallucinated
+lemma name (`Nat.pos_iff.mp n.pos` → `n.pos.ne'`) and case analysis the model's
+"all-bounded" argument missed. The lesson generalizes: **the agent loop's ceiling
+today isn't structural reasoning, it's leaf-level tactic iteration** — and a
+5-minute human second pass over a "failed" run often converts it into a closure.
+
 ## Architecture: one Lean verifier, swappable provers
 
 ```

@@ -13,7 +13,7 @@ It's organized as a 4-rung ladder. Do them in order; each is an hour or two.
 | 1 | **SMT solving** — fully-automatic logic + arithmetic engines (the industrial workhorse) | `uv run 01-smt/examples.py` | [`01-smt/`](./01-smt) |
 | 2 | **Lean 4 basics** — interactive proving; the language LLM provers target | `cd 02-lean-basics && lake build` | [`02-lean-basics/`](./02-lean-basics) |
 | 3 | **Lean + Mathlib + a hammer** — proving against the 274K-theorem library, with one-button automation | `cd 03-lean-math && lake env lean LeanMath/Hammer.lean` | [`03-lean-math/`](./03-lean-math) |
-| 4 | **Leverage an LLM** — an agent loop: LLM drafts a proof → Lean verifies → iterate on errors | `cd 04-llm-agent && uv run python agent.py --all --prover local` | [`04-llm-agent/`](./04-llm-agent) |
+| 4 | **Leverage an LLM** — an agent loop: LLM drafts a proof → Lean verifies → iterate on errors. An extended run of this loop landed a [merged proof](https://github.com/google-deepmind/formal-conjectures/pull/4286) in Google DeepMind's formal-conjectures | `cd 04-llm-agent && uv run python agent.py --all --prover local` | [`04-llm-agent/`](./04-llm-agent) |
 
 📖 **[`GETTING_STARTED.md`](./GETTING_STARTED.md)** — the detailed, do-it-yourself walkthrough.
 🔬 **[`RESEARCH.md`](./RESEARCH.md)** — the field survey: classical ATP, SMT, hammers, the
