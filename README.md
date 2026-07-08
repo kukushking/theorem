@@ -1,4 +1,4 @@
-# Automated Theorem Proving (ATP) Bootcamp
+# Automated Theorem Proving Bootcamp
 
 > *I spent the tokens on it so you don't have to.*
 
