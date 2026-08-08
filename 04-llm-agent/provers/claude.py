@@ -98,7 +98,15 @@ class ClaudeProver(Prover):
     ):
         self.max_tokens = max_tokens
         # Reads ANTHROPIC_API_KEY from env automatically.
-        self.client = Anthropic()
+        # Generous read timeout: on hard targets, adaptive-thinking models can
+        # go quiet on the stream for many minutes before the first text delta —
+        # the httpx default read timeout kills the run mid-attempt (seen on
+        # maximalLength_four with Fable, 2026-07-10).
+        import httpx
+        self.client = Anthropic(
+            timeout=httpx.Timeout(connect=10.0, read=1800.0, write=60.0, pool=30.0),
+            max_retries=2,
+        )
         self.model = model or DEFAULT_MODEL
 
     def propose(self, theorem: str, prior_errors: list[str]) -> str:
@@ -106,20 +114,24 @@ class ClaudeProver(Prover):
         # request timeouts. We don't need to handle individual stream events
         # because we only want the final concatenated text — `get_final_message()`
         # gives us the Message object as if we'd called `messages.create()`.
+        #
+        # Thinking, per model family:
+        # - Opus 4.7/4.8: adaptive is the only on-mode; we pass `disabled` because
+        #   on hard targets (Lambert) adaptive filled the whole `max_tokens` budget
+        #   with hidden reasoning and emitted zero text (`stop_reason=max_tokens`,
+        #   1789 thinking / 0 text tokens confirmed by direct probe). Disabled
+        #   forces the model to commit: shallow-but-emitted beats deep-and-empty.
+        # - Fable (claude-fable-5): `disabled` returns 400 — thinking can't be
+        #   turned off. Omit the param; it defaults to adaptive. Fable manages
+        #   its own budget, so the Opus failure mode is a watch-item, not a given:
+        #   check `stop_reason` in the log if output comes back empty.
+        extra: dict = {}
+        if "fable" not in self.model:
+            extra["thinking"] = {"type": "disabled"}
         with self.client.messages.stream(
             model=self.model,
             max_tokens=self.max_tokens,
-            # Opus 4.7/4.8 specifics: adaptive thinking is the *only* on-mode;
-            # `budget_tokens` and sampling params (temperature/top_p/top_k) return 400.
-            # NOTE: thinking disabled. On Opus 4.8 with adaptive thinking, hard
-            # targets like the Lambert series identity caused the model to fill
-            # the entire `max_tokens` budget with thinking and never emit a text
-            # block — `stop_reason=max_tokens`, zero usable output. Diagnostic
-            # confirmed via direct API probe: 1789 thinking tokens / 0 text tokens
-            # at max_tokens=4096 even on effort=medium. Disabling thinking forces
-            # the model to commit to an answer directly. The trade-off: shallower
-            # reasoning. Worth it because shallow-but-emitted beats deep-and-empty.
-            thinking={"type": "disabled"},
+            **extra,
             output_config={"effort": "medium"},
             # System prompt is identical every call — cache it once, read it cheap thereafter.
             # Note: Opus 4.7/4.8's min cacheable prefix is 4096 tokens; our system
