@@ -4,21 +4,34 @@
 > iterate on the compiler errors. Empirical, hands-on, and the truest test of where
 > LLM-based theorem proving actually sits today.
 
-## Field result: a merged upstream contribution
+## Field results: merged upstream contributions
 
 This architecture — the same prover/verifier loop in this directory, extended with
-full-file context and an `#print axioms` soundness check — produced a proof of the
-**Lambert series identity** (Erdős Problem 1049's textbook lemma), merged into
-Google DeepMind's [formal-conjectures](https://github.com/google-deepmind/formal-conjectures)
-as [PR #4286](https://github.com/google-deepmind/formal-conjectures/pull/4286)
-(June 2026, +195/-1, kernel-verified: `propext`, `Classical.choice`, `Quot.sound` only).
+full-file context and an `#print axioms` soundness check — has produced kernel-verified
+proofs merged into Google DeepMind's
+[formal-conjectures](https://github.com/google-deepmind/formal-conjectures):
 
-The working split that got it there: the LLM (Opus 4.8) produced ~95% of the proof
-structure; a human closed the remaining ~5% — surgical fixes like a hallucinated
-lemma name (`Nat.pos_iff.mp n.pos` → `n.pos.ne'`) and case analysis the model's
-"all-bounded" argument missed. The lesson generalizes: **the agent loop's ceiling
-today isn't structural reasoning, it's leaf-level tactic iteration** — and a
-5-minute human second pass over a "failed" run often converts it into a closure.
+- **[PR #4286](https://github.com/google-deepmind/formal-conjectures/pull/4286)** —
+  the **Lambert series identity** (Erdős Problem 1049's textbook lemma; June 2026,
+  +195/−1). Driven by Opus 4.8: the model produced ~95% of the proof structure, a
+  human closed the remaining ~5% (a hallucinated lemma name, one missed case analysis).
+- **[PR #4411](https://github.com/google-deepmind/formal-conjectures/pull/4411)** —
+  `possible_f_values_BddAbove` (Erdős Problem 92 sanity check; July 2026, +13/−6).
+  Driven by Claude Fable 5: **closed on attempt 1 with no target-specific hints** and
+  merged with only reviewer style golf — no human proof repair at all.
+- A third (Hadamard's 12×12 matrix, [PR #4833](https://github.com/google-deepmind/formal-conjectures/pull/4833))
+  is under review as of August 2026.
+
+Every claim above is checkable: each PR's axiom audit shows only `propext`,
+`Classical.choice`, `Quot.sound` — no `sorryAx`, no user axioms.
+
+Two lessons generalize. First, the agent loop's ceiling isn't structural reasoning
+but **leaf-level tactic iteration** — a 5-minute human pass over a "failed" run often
+converts it into a closure. Second, and more surprising: **the scaffold can be the
+bottleneck, not the model.** The Hadamard proof failed 0/6 in the loop until the
+harness learned to retry verification under a raised `maxHeartbeats` budget — after
+which the model's *first attempt* turned out to have been correct all along. Measure
+your harness before blaming your model.
 
 ## Architecture: one Lean verifier, swappable provers
 
