@@ -17,8 +17,10 @@ It's organized as a 4-rung ladder. Do them in order; each is an hour or two.
 
 ### Merged into DeepMind's formal-conjectures 🎉
 
-Proofs produced with this bootcamp's rung-4 agent loop, reviewed by maintainers and merged
-into Google DeepMind's [formal-conjectures](https://github.com/google-deepmind/formal-conjectures)
+Proofs produced with a research-grade extension of this bootcamp's rung-4 agent loop
+(not yet included in this repo — see the [rung 4 README](./04-llm-agent/README.md) for
+what ships vs. what proved), reviewed by maintainers and merged into Google DeepMind's
+[formal-conjectures](https://github.com/google-deepmind/formal-conjectures)
 (the open catalog of formalized conjectures behind their AI-for-math efforts):
 
 - **The Lambert series identity** ([#4286](https://github.com/google-deepmind/formal-conjectures/pull/4286)) —

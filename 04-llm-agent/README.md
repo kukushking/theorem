@@ -6,10 +6,17 @@
 
 ## Field results: proofs merged into formal-conjectures
 
-This architecture — the same prover/verifier loop in this directory, extended with
-full-file context and an `#print axioms` soundness check — has produced kernel-verified
+An extended, research-grade variant of this rung's loop has produced kernel-verified
 proofs merged into Google DeepMind's
 [formal-conjectures](https://github.com/google-deepmind/formal-conjectures):
+
+> **Precision note:** what ships in this directory is the *minimal teaching loop* —
+> deliberately small, meant to be read and rebuilt. The proofs below came from a
+> research harness that grew out of it (full-file context, a Lean-idiom hint system,
+> a goal-state repair loop, `#print axioms` auditing, per-run prompt provenance).
+> That harness is **not yet in this repo**; publishing it, with its benchmark logs,
+> is planned. Until then: the results are real and checkable via the PRs, but you
+> cannot reproduce them with the code here alone.
 
 - **[PR #4286](https://github.com/google-deepmind/formal-conjectures/pull/4286)** —
   the **Lambert series identity** (Erdős Problem 1049's textbook lemma; June 2026, +195/−1):
