@@ -13,7 +13,32 @@ It's organized as a 4-rung ladder. Do them in order; each is an hour or two.
 | 1 | **SMT solving** — fully-automatic logic + arithmetic engines (the industrial workhorse) | `uv run 01-smt/examples.py` | [`01-smt/`](./01-smt) |
 | 2 | **Lean 4 basics** — interactive proving; the language LLM provers target | `cd 02-lean-basics && lake build` | [`02-lean-basics/`](./02-lean-basics) |
 | 3 | **Lean + Mathlib + a hammer** — proving against the 274K-theorem library, with one-button automation | `cd 03-lean-math && lake env lean LeanMath/Hammer.lean` | [`03-lean-math/`](./03-lean-math) |
-| 4 | **Leverage an LLM** — an agent loop: LLM drafts a proof → Lean verifies → iterate on errors. Extended runs of this loop have landed merged proofs in Google DeepMind's formal-conjectures ([#4286](https://github.com/google-deepmind/formal-conjectures/pull/4286), [#4411](https://github.com/google-deepmind/formal-conjectures/pull/4411)) | `cd 04-llm-agent && uv run python agent.py --all --prover local` | [`04-llm-agent/`](./04-llm-agent) |
+| 4 | **Leverage an LLM** — an agent loop: LLM drafts a proof → Lean verifies → iterate on errors. Extended runs of this loop have landed kernel-verified proofs in **Google DeepMind's [formal-conjectures](https://github.com/google-deepmind/formal-conjectures)** — see "Merged into DeepMind's formal-conjectures" below | `cd 04-llm-agent && uv run python agent.py --all --prover local` | [`04-llm-agent/`](./04-llm-agent) |
+
+### Merged into DeepMind's formal-conjectures 🎉
+
+Proofs produced with this bootcamp's rung-4 agent loop, reviewed by maintainers and merged
+into Google DeepMind's [formal-conjectures](https://github.com/google-deepmind/formal-conjectures)
+(the open catalog of formalized conjectures behind their AI-for-math efforts):
+
+- **The Lambert series identity** ([#4286](https://github.com/google-deepmind/formal-conjectures/pull/4286)) —
+  the textbook lemma of [Erdős Problem 1049](https://www.erdosproblems.com/1049) (Erdős, 1948):
+  for rational $|t| > 1$,
+  $$\sum_{n=1}^{\infty} \frac{1}{t^n - 1} = \sum_{n=1}^{\infty} \frac{\tau(n)}{t^n},$$
+  where $\tau(n)$ counts the divisors of $n$. ~150 lines of Lean: the convergent case rides
+  Mathlib's `tsum_pow_div_one_sub_eq_tsum_sigma`, the divergent cases close by non-summability
+  arguments. Claude Opus drafted ~95% of the structure; a human fixed two leaf-level tactics.
+- **Well-definedness for the Erdős equidistant-points problem**
+  ([#4411](https://github.com/google-deepmind/formal-conjectures/pull/4411)) — for
+  [Erdős Problem 92](https://www.erdosproblems.com/92), which asks about
+  $$f(n) = \max\{\,k : \exists\, A \subset \mathbb{R}^2,\ |A| = n,\ \forall x \in A\ \text{at least } k \text{ points of } A \text{ are equidistant from } x\,\},$$
+  the proof establishes that the set of achievable $k$ is bounded above, so $f(n)$
+  is well-defined as a supremum. Closed by **Claude Fable 5 on its first attempt, with no
+  target-specific hints**, and merged after review with only style golf.
+
+Every merged proof passes the strictest audit Lean offers: `#print axioms` shows only the
+three foundation axioms (`propext`, `Classical.choice`, `Quot.sound`) — no `sorryAx`, no
+user axioms. The kernel, not the model, is the authority.
 
 📖 **[`GETTING_STARTED.md`](./GETTING_STARTED.md)** — the detailed, do-it-yourself walkthrough.
 🔬 **[`RESEARCH.md`](./RESEARCH.md)** — the field survey: classical ATP, SMT, hammers, the

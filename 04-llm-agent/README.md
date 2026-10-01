@@ -4,7 +4,7 @@
 > iterate on the compiler errors. Empirical, hands-on, and the truest test of where
 > LLM-based theorem proving actually sits today.
 
-## Field results: merged upstream contributions
+## Field results: proofs merged into formal-conjectures
 
 This architecture — the same prover/verifier loop in this directory, extended with
 full-file context and an `#print axioms` soundness check — has produced kernel-verified
@@ -12,15 +12,25 @@ proofs merged into Google DeepMind's
 [formal-conjectures](https://github.com/google-deepmind/formal-conjectures):
 
 - **[PR #4286](https://github.com/google-deepmind/formal-conjectures/pull/4286)** —
-  the **Lambert series identity** (Erdős Problem 1049's textbook lemma; June 2026,
-  +195/−1). Driven by Opus 4.8: the model produced ~95% of the proof structure, a
-  human closed the remaining ~5% (a hallucinated lemma name, one missed case analysis).
+  the **Lambert series identity** (Erdős Problem 1049's textbook lemma; June 2026, +195/−1):
+  for rational $|t| > 1$,
+  $$\sum_{n=1}^{\infty} \frac{1}{t^n - 1} = \sum_{n=1}^{\infty} \frac{\tau(n)}{t^n},
+  \qquad \tau(n) = \#\{d : d \mid n\}.$$
+  Driven by Opus 4.8: the model produced ~95% of the proof structure, a human closed the
+  remaining ~5% (a hallucinated lemma name, one missed case analysis).
 - **[PR #4411](https://github.com/google-deepmind/formal-conjectures/pull/4411)** —
-  `possible_f_values_BddAbove` (Erdős Problem 92 sanity check; July 2026, +13/−6).
-  Driven by Claude Fable 5: **closed on attempt 1 with no target-specific hints** and
-  merged with only reviewer style golf — no human proof repair at all.
-- A third (Hadamard's 12×12 matrix, [PR #4833](https://github.com/google-deepmind/formal-conjectures/pull/4833))
-  is under review as of August 2026.
+  `possible_f_values_BddAbove` (Erdős Problem 92 sanity check; July 2026, +13/−6). The
+  problem concerns
+  $$f(n) = \max\{\,k : \exists\, A \subset \mathbb{R}^2,\ |A| = n,\ \forall x \in A\ \text{at least } k \text{ points of } A \text{ are equidistant from } x\,\};$$
+  the proof shows every point of an $n$-point set has at most $n$ equidistant companions,
+  so the achievable $k$ are bounded and $f(n)$ is a well-defined supremum. Driven by Claude Fable 5:
+  **closed on attempt 1 with no target-specific hints** and merged with only reviewer
+  style golf — no human proof repair at all.
+- A third proof (Hadamard's 12×12 matrix is a Hadamard matrix: entries $\pm 1$ and
+  $|\det| = 12^6$) was closed by the harness on attempt 1 — then superseded before merge
+  by another contributor's independent proof of the same `sorry`
+  ([#6037](https://github.com/google-deepmind/formal-conjectures/pull/6037)); in a repo
+  this active, speed matters.
 
 Every claim above is checkable: each PR's axiom audit shows only `propext`,
 `Classical.choice`, `Quot.sound` — no `sorryAx`, no user axioms.
