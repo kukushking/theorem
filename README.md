@@ -38,6 +38,15 @@ what ships vs. what proved), reviewed by maintainers and merged into Google Deep
   is well-defined as a supremum. Closed by **Claude Fable 5 on its first attempt, with no
   target-specific hints**, and merged after review with only style golf.
 
+- **Five test values of a mass-redistribution cellular automaton**
+  ([#6782](https://github.com/google-deepmind/formal-conjectures/pull/6782)) — for
+  [OEIS A300997](https://oeis.org/A300997), the step count to stabilization under
+  $$c_{t+1}(i) = \lceil c_t(i)/2 \rceil + \lfloor c_t(i-1)/2 \rfloor, \qquad a(n) = \min\{ t : c_t = (1,\dots,1) \},$$
+  the proofs establish $a(1)=0$, $a(2)=1$, $a(3)=3$, $a(4)=4$, $a(5)=6$ — each pinning
+  the defining infimum with a membership-plus-minimality argument the kernel checks by
+  computation. All five closed by **Claude Fable 5 on first attempts, with no hints**;
+  merged with two approvals in six days.
+
 Every merged proof passes the strictest audit Lean offers: `#print axioms` shows only the
 three foundation axioms (`propext`, `Classical.choice`, `Quot.sound`) — no `sorryAx`, no
 user axioms. The kernel, not the model, is the authority.
