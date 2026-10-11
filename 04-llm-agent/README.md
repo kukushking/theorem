@@ -45,6 +45,15 @@ proofs merged into Google DeepMind's
   (the REPL ecosystem lagged the repo's Lean toolchain). Fittingly, the file's own header
   cites *AI-Driven Formal Proof Search* (arXiv:2605.22763) — its test sorries were closed
   by exactly the kind of loop it documents.
+- **[PR #7103](https://github.com/google-deepmind/formal-conjectures/pull/7103)** —
+  `h_seven` (Erdős Problem 813 base case; October 2026, +33/−1). The problem asks to
+  estimate the minimal clique number forced by a local triangle condition,
+  $$h(n) = \min\{\,\omega(G) : G \text{ a graph on } n \text{ vertices, every } 7 \text{ vertices of } G \text{ contain a triangle}\,\};$$
+  the proof pins the base case $h(7) = 3$ (lower bound: the whole graph is a $7$-set, so
+  it contains a triangle; upper bound: a triangle plus four isolated vertices). Generated
+  by a custom Lean-kernel-verified theorem-proving harness — an attempt loop with
+  compiler-error feedback, driving **Claude Fable 5** as the LLM backend; opened and
+  merged within a day.
 - A third proof (Hadamard's 12×12 matrix is a Hadamard matrix: entries $\pm 1$ and
   $|\det| = 12^6$) was closed by the harness on attempt 1 — then superseded before merge
   by another contributor's independent proof of the same `sorry`
