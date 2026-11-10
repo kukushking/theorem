@@ -27,3 +27,12 @@ __pycache__/
 **/_erdos/
 **/_audit_snapshots/
 05-pvsnp-audit/
+
+# Coq/Rocq build artifacts (rung 5)
+*.vo
+*.vos
+*.vok
+*.glob
+.*.aux
+.lia.cache
+.nia.cache

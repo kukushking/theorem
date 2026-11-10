@@ -6,7 +6,7 @@ A hands-on, build-first path into automated theorem proving (ATP) — from "what
 *is* this field" to running real provers on your own machine, with an eye on how modern
 **LLMs** fit in. Everything here is something you can **run and test**, not just read.
 
-It's organized as a 4-rung ladder. Do them in order; each is an hour or two.
+It's organized as a 5-rung ladder. Do them in order; each is an hour or two.
 
 | # | Rung | You'll run | Folder |
 |---|------|-----------|--------|
@@ -14,6 +14,7 @@ It's organized as a 4-rung ladder. Do them in order; each is an hour or two.
 | 2 | **Lean 4 basics** — interactive proving; the language LLM provers target | `cd 02-lean-basics && lake build` | [`02-lean-basics/`](./02-lean-basics) |
 | 3 | **Lean + Mathlib + a hammer** — proving against the 274K-theorem library, with one-button automation | `cd 03-lean-math && lake env lean LeanMath/Hammer.lean` | [`03-lean-math/`](./03-lean-math) |
 | 4 | **Leverage an LLM** — an agent loop: LLM drafts a proof → Lean verifies → iterate on errors. Extended runs of this loop have landed kernel-verified proofs in **Google DeepMind's [formal-conjectures](https://github.com/google-deepmind/formal-conjectures)** — see "Merged into DeepMind's formal-conjectures" below | `cd 04-llm-agent && uv run python agent.py --all --prover local` | [`04-llm-agent/`](./04-llm-agent) |
+| 5 | **Coq (Rocq) + a verified program** — the second assistant, and the one behind most verified *software* (CompCert, Iris). Engineer-first: programs and unit tests (`program.v`), the logic phrasebook (`basics.v`), then insertion sort proven correct against its spec (`verified.v`) | `cd 05-coq && rocq compile program.v` | [`05-coq/`](./05-coq) |
 
 ### Merged into DeepMind's formal-conjectures 🎉
 
@@ -133,6 +134,15 @@ cd ..
 brew install --cask ollama && open -a Ollama
 ollama pull qwen2.5-coder:7b
 cd 04-llm-agent && uv sync && uv run python agent.py --all --prover local
+cd ..
+
+# 6. Rung 5 — Coq (Rocq), engineer-first
+brew install rocq
+cd 05-coq
+rocq compile program.v    # 1 — programs + unit tests (Compute prints your answers)
+rocq compile basics.v     # 2 — the logic phrasebook
+rocq compile verified.v   # 3 (optional) — insertion sort, proven correct against its spec
+# "Closed under the global context" = the kernel's all-clear
 ```
 
 Install the VS Code **Lean 4** extension to watch proof goals update live as you type.
@@ -153,7 +163,8 @@ is the best first hour.
 ├── 01-smt/               # Rung 1 — Z3 / SMT examples + exercises
 ├── 02-lean-basics/       # Rung 2 — core-Lean proofs (no Mathlib, instant build)
 ├── 03-lean-math/         # Rung 3 — Lean + Mathlib workbench + HAMMER.md (cache not committed)
-└── 04-llm-agent/         # Rung 4 — LLM-driven Lean prover (Anthropic API + Ollama)
+├── 04-llm-agent/         # Rung 4 — LLM-driven Lean prover (Anthropic API + Ollama)
+└── 05-coq/               # Rung 5 — Coq/Rocq: second assistant + a verified program
 ```
 
 The big build artifacts (`**/.lake/`, the multi-GB Mathlib cache, `.olean` files) are

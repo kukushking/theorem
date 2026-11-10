@@ -91,6 +91,38 @@ solo-achievable on your Mac. The verifier you'll call is the same `03-lean-math`
 (programmatically, via `pip install lean-interact`). See `RESEARCH.md` §6 for the build
 ladder and the [Minimal Agent paper](https://arxiv.org/abs/2602.24273) to copy from.
 
+## Rung 5 — Coq (Rocq): the second assistant
+
+Once the Lean rungs are done, spend an hour or two in **Coq** (renamed the **Rocq
+Prover** in 2025): `brew install rocq`, then `cd 05-coq` and take the three files
+in order. One reading rule first, from the rung's README: **never read a proof
+script as text** — it's a transcript of an interactive session, and the
+information lives in the goal panel (VS Code + VsCoq), not in the tactic names.
+
+**Part 1 — `program.v`** is Coq as a programming language, no logic symbols:
+define `add` and a running sum, run them with `Compute` (the answers print at
+compile time), write unit tests the compiler refuses to skip, and meet the one
+new idea — a unit test with `forall` in it is a theorem, property-based testing
+with infinite coverage. The closing exercise is the most engineer-shaped theorem
+in the repo: refactor to tail-recursion and *prove the refactor changed nothing*.
+
+**Part 2 — `basics.v`** re-proves rung 2's theorems. The point is transfer — every
+concept (Curry–Howard, tactics, goal states, kernel audits, decision procedures)
+carries across assistants; only the syntax changes. The rung's README has a
+Lean↔Coq phrasebook, and `basics.v` demonstrates the cleanest "definitional
+equality" lesson in the repo: which of `n + 0 = n` / `0 + n = n` is trivial
+*flips* between the two assistants.
+
+**Part 3 — `verified.v`** *(optional)* is the industrial demo: **verify a
+program**, the way CompCert and Fiat-Crypto do at scale. Insertion sort, a
+specification (*output is sorted* ∧ *output is a permutation of the input*), and
+a kernel-checked proof that the program meets it. Read the *statements* and skip
+the proof bodies. The teaching core is the spec itself: each half alone is
+gameable (`fun l => []` is always sorted; `fun l => l` is always a permutation),
+and the exercises make you prove the cheating program satisfies half the spec,
+so you feel why *writing specs that can't be gamed* — not proving — is the hard
+problem of software verification.
+
 ---
 
 ## Layout
@@ -101,5 +133,7 @@ theorem/
 ├── GETTING_STARTED.md    # this file
 ├── 01-smt/               # Rung 1: Z3 examples + exercises
 ├── 02-lean-basics/       # Rung 2: core-Lean proofs (no Mathlib, instant build)
-└── 03-lean-math/         # Rung 3: Lean + Mathlib project + HAMMER.md (the real workbench)
+├── 03-lean-math/         # Rung 3: Lean + Mathlib project + HAMMER.md (the real workbench)
+├── 04-llm-agent/         # Rung 4: the LLM agent loop (Anthropic API + Ollama)
+└── 05-coq/               # Rung 5: Coq/Rocq — second assistant + a verified program
 ```
